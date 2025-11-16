@@ -2,8 +2,8 @@ pipeline {
     agent any
 
     tools {
-        maven 'Maven3'   // Nom exact de Maven configuré dans Jenkins
-        jdk 'JDK17'      // Nom exact du JDK configuré dans Jenkins
+        maven 'Maven3'   // Nom exact configuré dans Jenkins
+        jdk 'JDK17'      // Nom exact configuré dans Jenkins
     }
 
     stages {
@@ -35,7 +35,6 @@ pipeline {
 
         stage('SAST') {
             steps {
-                // Utilise le token SonarQube correctement
                 withCredentials([string(credentialsId: 'sonar_token', variable: 'SONAR_TOKEN')]) {
                     sh """
                         mvn sonar:sonar \
