@@ -2,12 +2,11 @@ pipeline {
     agent any
 
     tools {
-        maven 'Maven3'   // Nom exact configuré dans Jenkins
-        jdk 'JDK17'      // Nom exact configuré dans Jenkins
+        maven 'Maven3'   // Nom exact de Maven configuré dans Jenkins
+        jdk 'JDK17'      // Nom exact du JDK configuré dans Jenkins
     }
 
     stages {
-
         stage('Checkout') {
             steps {
                 checkout([
@@ -43,6 +42,17 @@ pipeline {
                         -Dsonar.login=$SONAR_TOKEN
                     """
                 }
+            }
+        }
+
+        stage('DAST') {
+            steps {
+                sh """
+                    docker run -t owasp/zap2docker-stable zap-baseline.py \
+                    -t http://192.168.17.146:8080 \
+                    -r report.html
+                """
+                archiveArtifacts artifacts: 'report.html', fingerprint: true
             }
         }
     }
