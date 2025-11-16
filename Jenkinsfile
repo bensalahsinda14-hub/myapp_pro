@@ -48,11 +48,13 @@ pipeline {
         stage('DAST') {
             steps {
                 sh """
-                    docker run -t owasp/zap2docker-stable zap-baseline.py \
+                    mkdir -p /home/jenkins/zap-reports
+                    docker run -t -v /home/jenkins/zap-reports:/zap/wrk \
+                    ghcr.io/zaproxy/zaproxy:stable zap-baseline.py \
                     -t http://192.168.17.146:8080 \
-                    -r report.html
+                    -r /zap/wrk/report.html
                 """
-                archiveArtifacts artifacts: 'report.html', fingerprint: true
+                archiveArtifacts artifacts: '/home/jenkins/zap-reports/report.html', fingerprint: true
             }
         }
     }
