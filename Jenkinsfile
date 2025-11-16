@@ -2,18 +2,8 @@ pipeline {
     agent any
 
     tools {
-<<<<<<< HEAD
-<<<<<<< HEAD
         maven 'Maven3'   // Nom exact configuré dans Jenkins
         jdk 'JDK17'      // Nom exact configuré dans Jenkins
-=======
-        maven 'Maven3'   // Nom exact de Maven configuré dans Jenkins
-        jdk 'JDK17'      // Nom exact du JDK configuré dans Jenkins
->>>>>>> Add Jenkinsfile for Jenkins pipeline
-=======
-        maven 'Maven3'     // Nom exact dans Jenkins
-        jdk 'JDK17'        // Nom exact dans Jenkins
->>>>>>> Trigger pipeline for SAST
     }
 
     stages {
