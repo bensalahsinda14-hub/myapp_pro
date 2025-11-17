@@ -2,13 +2,13 @@ pipeline {
     agent any
 
     tools {
-        maven 'Maven3'      
-        jdk 'JDK17'         
+        maven 'Maven3'
+        jdk 'JDK17'
     }
 
     stages {
 
-        /* --- 1) CLONE GITHUB --- */
+        /* --- 1) CHECKOUT FROM GITHUB --- */
         stage('Checkout') {
             steps {
                 checkout([
