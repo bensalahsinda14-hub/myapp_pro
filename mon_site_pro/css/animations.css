@@ -1,0 +1,36 @@
+/* ==========================
+   ANIMATIONS AU SCROLL
+=========================== */
+.animate-in {
+    opacity: 1;
+    transform: translateY(0);
+    transition: all 0.8s ease-in-out;
+}
+
+.feature-card, .service-card {
+    opacity: 0;
+    transform: translateY(20px);
+}
+
+/* ==========================
+   HOVER ANIMATION BUTTON
+=========================== */
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 10px rgba(0,0,0,0.1);
+}
+
+/* ==========================
+   HAMBURGER ANIMATION
+=========================== */
+.hamburger.active span:nth-child(1) {
+    transform: rotate(45deg) translate(5px, 5px);
+}
+
+.hamburger.active span:nth-child(2) {
+    opacity: 0;
+}
+
+.hamburger.active span:nth-child(3) {
+    transform: rotate(-45deg) translate(5px, -5px);
+}

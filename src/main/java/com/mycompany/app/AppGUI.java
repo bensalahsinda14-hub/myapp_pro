@@ -3,6 +3,7 @@ package com.mycompany.app;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.net.URI;
 import java.util.ArrayList;
 
 public class AppGUI {
@@ -14,10 +15,11 @@ public class AppGUI {
 
         JFrame frame = new JFrame("MyApp Pro - Interface Graphique");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(480, 320);
+        frame.setSize(500, 400);
         frame.setLocationRelativeTo(null);
         frame.setLayout(new BorderLayout(10, 10));
 
+        // Formulaire utilisateur
         JPanel form = new JPanel(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
         c.insets = new Insets(6,6,6,6);
@@ -33,11 +35,13 @@ public class AppGUI {
         c.gridx = 0; c.gridy = 1; form.add(lblEmail, c);
         c.gridx = 1; c.gridy = 1; form.add(tfEmail, c);
 
+        // Liste des utilisateurs
         JList<String> jlist = new JList<>(listModel);
         JScrollPane scroll = new JScrollPane(jlist);
-        scroll.setPreferredSize(new Dimension(440, 120));
+        scroll.setPreferredSize(new Dimension(460, 150));
 
-        JPanel buttons = new JPanel(new FlowLayout(FlowLayout.CENTER, 12, 8));
+        // Boutons
+        JPanel buttons = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
         JButton btnAjouter = new JButton("Ajouter");
         JButton btnConnecter = new JButton("Connecter");
         JButton btnEffacer = new JButton("Effacer");
@@ -52,13 +56,27 @@ public class AppGUI {
         frame.add(scroll, BorderLayout.CENTER);
         frame.add(buttons, BorderLayout.SOUTH);
 
+        // Action Ajouter
         btnAjouter.addActionListener((ActionEvent e) -> {
             String name = tfName.getText().trim();
             String email = tfEmail.getText().trim();
             if (name.isEmpty() || email.isEmpty()) {
-                JOptionPane.showMessageDialog(frame, "Remplis nom + email avant d'ajouter.", "Attention", JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(frame, "Remplis nom et email !");
                 return;
             }
+            // Validation nom (lettres seulement)
+            if (!name.matches("[a-zA-ZÀ-ÿ\\s'-]+")) {
+                JOptionPane.showMessageDialog(frame, "Nom invalide ! Utilise seulement des lettres.");
+                return;
+            }
+
+            // Validation email (exemple Gmail ou autre)
+            String emailRegex = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}$";
+            if (!email.matches(emailRegex)) {
+                JOptionPane.showMessageDialog(frame, "Email invalide ! Ex: exemple@gmail.com");
+                return;
+            }
+
             String item = name + " <" + email + ">";
             storage.add(item);
             listModel.addElement(item);
@@ -66,27 +84,70 @@ public class AppGUI {
             tfEmail.setText("");
         });
 
+        // Action Connecter
         btnConnecter.addActionListener((ActionEvent e) -> {
             if (storage.isEmpty()) {
-                JOptionPane.showMessageDialog(frame, "Aucun utilisateur. Ajoute d'abord.", "Info", JOptionPane.INFORMATION_MESSAGE);
-            } else {
-                JOptionPane.showMessageDialog(frame, "Connexion simulée réussie.\nNb utilisateurs: " + storage.size(), "Connecté", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(frame, "Aucun utilisateur à connecter !");
+                return;
+            }
+
+            String[] pages = {"index.html", "about.html", "services.html", "portfolio.html", "contact.html"};
+            String choix = (String) JOptionPane.showInputDialog(
+                    frame,
+                    "Choisis une page du site à ouvrir:",
+                    "Ouvrir site",
+                    JOptionPane.PLAIN_MESSAGE,
+                    null,
+                    pages,
+                    pages[0]
+            );
+
+            if (choix != null) {
+                try {
+                    // Remplace le chemin ci-dessous par le chemin réel de ton dossier "mon_site_pro"
+                    String path = "file:///home/devops/myapp_pro/mon_site_pro/" + choix;
+                    Desktop.getDesktop().browse(new URI(path));
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                    JOptionPane.showMessageDialog(frame, "Impossible d'ouvrir la page !");
+                }
             }
         });
 
+        // Action Effacer
         btnEffacer.addActionListener((ActionEvent e) -> {
             int sel = jlist.getSelectedIndex();
             if (sel >= 0) {
-                storage.remove(sel);
-                listModel.remove(sel);
+                String code = JOptionPane.showInputDialog(frame, "Entre le code secret (4 chiffres) pour effacer :");
+                if (code != null && code.matches("\\d{4}")) {
+                    // Code correct = 1234 (à changer si tu veux)
+                    if (code.equals("1234")) {
+                        storage.remove(sel);
+                        listModel.remove(sel);
+                        JOptionPane.showMessageDialog(frame, "Utilisateur supprimé !");
+                    } else {
+                        JOptionPane.showMessageDialog(frame, "Code incorrect ! Suppression annulée.");
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(frame, "Code invalide ! Suppression annulée.");
+                }
             } else {
-                JOptionPane.showMessageDialog(frame, "Sélectionne un élément pour effacer.", "Erreur", JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(frame, "Sélectionne un utilisateur à effacer !");
             }
         });
 
+        // Action Quitter
         btnQuitter.addActionListener((ActionEvent e) -> {
-            frame.dispose();
-            System.exit(0);
+            int confirm = JOptionPane.showConfirmDialog(
+                    frame,
+                    "Voulez‑vous vraiment quitter ?",
+                    "Confirmation",
+                    JOptionPane.YES_NO_OPTION
+            );
+            if (confirm == JOptionPane.YES_OPTION) {
+                frame.dispose();
+                System.exit(0);
+            }
         });
 
         frame.setVisible(true);
