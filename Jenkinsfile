@@ -7,7 +7,6 @@ pipeline {
     }
 
     stages {
-
         stage('Checkout') {
             steps {
                 checkout([
@@ -49,40 +48,33 @@ pipeline {
         stage('DAST - OWASP ZAP') {
             steps {
                 script {
-                    // Crée le répertoire des rapports si pas existant
-                    sh 'mkdir -p /home/jenkins/zap-reports'
+                    // Crée un dossier pour les rapports dans le workspace
+                    sh "mkdir -p ${WORKSPACE}/zap-reports"
 
-                    // Lancer ZAP en mode baseline scan
+                    // Lancer OWASP ZAP en Docker pour un scan baseline
                     sh """
                         docker run --rm -t \
-                        -v /home/jenkins/zap-reports:/zap/wrk \
+                        -v ${WORKSPACE}/zap-reports:/zap/wrk \
                         ghcr.io/zaproxy/zaproxy:stable zap-baseline.py \
                         -t http://192.168.17.146:8080 \
-                        -r /zap/wrk/report.html \
-                        -J /zap/wrk/report.json
+                        -r /zap/wrk/report.html
                     """
                 }
-
-                // Archiver le rapport HTML et JSON
-                archiveArtifacts artifacts: '/home/jenkins/zap-reports/report.html', fingerprint: true
-                archiveArtifacts artifacts: '/home/jenkins/zap-reports/report.json', fingerprint: true
+                // Archiver le rapport
+                archiveArtifacts artifacts: 'zap-reports/report.html', fingerprint: true
             }
         }
 
         stage('DAST - Optional Full Scan') {
             steps {
-                script {
-                    echo 'Si besoin, on peut ajouter un full scan avec ZAP GUI ou API pour tests approfondis'
-                    // Exemple (commenté):
-                    // sh 'docker run --rm -v /home/jenkins/zap-reports:/zap/wrk ghcr.io/zaproxy/zaproxy:stable zap-full-scan.py -t http://192.168.17.146:8080 -r /zap/wrk/full-report.html'
-                }
+                echo "Tu peux ajouter ici un scan complet OWASP ZAP si tu veux."
             }
         }
     }
 
     post {
         always {
-            echo 'Pipeline terminé, rapports SAST et DAST archivés.'
+            echo "Pipeline terminé, rapports SAST et DAST archivés."
         }
     }
 }
