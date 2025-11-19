@@ -1,4 +1,20 @@
+# Maven
 /target/
+
+# IDE
 /.idea/
 /*.iml
+
+# Logs et fichiers temporaires
 *.log
+*.tmp
+*.swp
+
+# OS
+.DS_Store
+
+# Grafana & Prometheus data temporaires (si nécessaire)
+/data/
+/grafana/data/
+/grafana/plugins/
+
