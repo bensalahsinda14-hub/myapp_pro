@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Espace Étudiant</title>
+    <link rel="stylesheet" href="css/style.css">
+    
+</head>
+<body>
+    <div class="container">
+        <h1>Bienvenue Étudiant</h1>
+        <p>Choisis ton cours :</p>
+
+        <label>Niveau :</label>
+        <select id="niveauSelect">
+            <option value="">-- Choisir Niveau --</option>
+            <option value="7">7ème</option>
+            <option value="8">8ème</option>
+            <option value="9">9ème</option>
+            <option value="1s">1ère Secondaire</option>
+            <option value="2s">2ème Secondaire</option>
+            <option value="3s">3ème Secondaire</option>
+            <option value="4s">BAC</option>
+        </select>
+
+        <label>Matière :</label>
+        <select id="matiereSelect">
+            <option value="">-- Choisir Matière --</option>
+            <option value="math">Mathématique</option>
+            <option value="phys">Physique</option>
+            <option value="eng">Anglais</option>
+            <option value="fr">Français</option>
+            <option value="ar">Arabe</option>
+        </select>
+
+        <button onclick="ouvrirCours()">Voir le Cours</button>
+    </div>
+
+    <script src="js/student.js"></script>
+</body>
+</html>
