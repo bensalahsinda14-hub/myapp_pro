@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cabinet Martin & Associés - Avocats</title>
+<style>
+* {margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;line-height:1.6;color:#333;}
+header{background:linear-gradient(135deg,#0a1f44 0%,#1e3a8a 100%);color:white;padding:1rem 0;position:fixed;width:100%;top:0;z-index:1000;box-shadow:0 4px 20px rgba(0,0,0,0.3);}
+nav{max-width:1200px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;padding:0 2rem;}
+.logo{font-size:1.5rem;font-weight:bold;letter-spacing:1px;}
+nav ul{list-style:none;display:flex;gap:2rem;}
+nav a{color:white;text-decoration:none;transition:opacity 0.3s;}
+nav a:hover{opacity:0.8;}
+.hero{background:linear-gradient(135deg,#0a1f44 0%,#1e3a8a 100%);color:white;padding:150px 2rem 100px;text-align:center;}
+.hero h1{font-size:3rem;margin-bottom:1rem;animation:fadeInUp 1s ease;}
+.hero p{font-size:1.3rem;margin-bottom:2rem;opacity:0.9;}
+.btn{display:inline-block;background:white;color:#1e3a8a;padding:1rem 2.5rem;border-radius:50px;text-decoration:none;font-weight:bold;transition:transform 0.3s, box-shadow 0.3s;}
+.btn:hover{transform:translateY(-3px);box-shadow:0 10px 25px rgba(0,0,0,0.3);}
+.section{max-width:1200px;margin:0 auto;padding:80px 2rem;}
+.section-title{text-align:center;font-size:2.5rem;margin-bottom:3rem;color:#0a1f44;}
+.services{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:2rem;}
+.service-card,.equipe-card{background:white;padding:2rem;border-radius:15px;box-shadow:0 5px 20px rgba(0,0,0,0.1);transition:transform 0.3s, box-shadow 0.3s;border:2px solid transparent;cursor:pointer;}
+.service-card:hover,.equipe-card:hover{transform:translateY(-10px);box-shadow:0 15px 40px rgba(30,58,138,0.2);border-color:#1e3a8a;}
+.service-icon,.equipe-photo{width:70px;height:70px;background:linear-gradient(135deg,#0a1f44 0%,#1e3a8a 100%);border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-size:2rem;margin-bottom:1.5rem;}
+.equipe-photo{width:100px;height:100px;font-size:3rem;}
+.service-card h3,.equipe-card h3{font-size:1.5rem;margin-bottom:1rem;color:#0a1f44;}
+.equipe-poste{color:#1e3a8a;font-weight:600;font-size:1.1rem;margin-bottom:0.5rem;}
+.equipe-specialite{color:#6b7280;font-style:italic;margin-bottom:0.5rem;}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:2rem;background:white;padding:3rem;border-radius:15px;box-shadow:0 5px 30px rgba(0,0,0,0.1);}
+.stat-card{text-align:center;}
+.stat-number{font-size:3rem;font-weight:bold;color:#1e3a8a;margin-bottom:0.5rem;}
+.contact{background:linear-gradient(135deg,#0a1f44 0%,#1e3a8a 100%);color:white;}
+.contact-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:2rem;text-align:center;}
+.contact-item{padding:2rem;background:rgba(255,255,255,0.1);border-radius:15px;}
+.contact-icon{width:60px;height:60px;background:rgba(255,255,255,0.2);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;font-size:1.5rem;}
+footer{background:#030712;color:white;text-align:center;padding:2rem;}
+.form-page{display:none;min-height:100vh;background:linear-gradient(135deg,#eff6ff 0%,#dbeafe 100%);padding-top:100px;}
+.form-page.active{display:block;}
+.form-container{max-width:700px;margin:0 auto;padding:2rem;}
+.form-header{text-align:center;margin-bottom:2rem;}
+.form-icon{width:80px;height:80px;background:linear-gradient(135deg,#0a1f44 0%,#1e3a8a 100%);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;font-size:2.5rem;color:white;}
+.form-card{background:white;padding:3rem;border-radius:20px;box-shadow:0 10px 40px rgba(0,0,0,0.15);}
+.form-group{margin-bottom:1.5rem;}
+.form-group label{display:block;margin-bottom:0.5rem;font-weight:600;color:#0a1f44;}
+.form-group input,.form-group textarea,.form-group select{width:100%;padding:1rem;border:2px solid #e5e7eb;border-radius:10px;font-family:inherit;font-size:1rem;transition:border-color 0.3s;}
+.form-group input:focus,.form-group textarea:focus,.form-group select:focus{outline:none;border-color:#1e3a8a;}
+.form-group textarea{resize:vertical;min-height:150px;}
+.error-message{color:#dc2626;font-size:0.875rem;margin-top:0.25rem;display:none;}
+.error-message.show{display:block;animation:fadeIn 0.3s ease;}
+.form-group.error input,.form-group.error textarea,.form-group.error select{border-color:#dc2626;animation:shake 0.3s ease;}
+@keyframes shake{0%,100%{transform:translateX(0);}25%{transform:translateX(-5px);}75%{transform:translateX(5px);} }
+@keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
+.submit-btn{width:100%;background:linear-gradient(135deg,#0a1f44 0%,#1e3a8a 100%);color:white;padding:1.2rem;border:none;border-radius:10px;font-weight:bold;font-size:1.1rem;cursor:pointer;transition:transform 0.3s, box-shadow 0.3s;}
+.submit-btn:hover{transform:translateY(-2px);box-shadow:0 10px 30px rgba(30,58,138,0.3);}
+.back-btn{display:inline-block;margin-bottom:2rem;color:#1e3a8a;text-decoration:none;font-weight:600;transition:transform 0.3s;}
+.back-btn:hover{transform:translateX(-5px);}
+.success-message{display:none;position:fixed;top:100px;left:50%;transform:translateX(-50%);background:#10b981;color:white;padding:1.5rem 3rem;border-radius:10px;box-shadow:0 10px 30px rgba(0,0,0,0.3);z-index:2000;animation:slideDown 0.5s ease;}
+.success-message.show{display:block;}
+.modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);justify-content:center;align-items:center;z-index:3000;}
+.modal.active{display:flex;}
+.modal-content{background:white;padding:2rem;border-radius:15px;max-width:500px;width:90%;text-align:center;position:relative;}
+.close-modal{position:absolute;top:10px;right:15px;font-size:1.5rem;cursor:pointer;color:#1e3a8a;}
+@keyframes slideDown{from{transform:translateX(-50%) translateY(-100px);opacity:0;}to{transform:translateX(-50%) translateY(0);opacity:1;}}
+@keyframes fadeInUp{from{opacity:0;transform:translateY(30px);}to{opacity:1;transform:translateY(0);}}
+@media (max-width:768px){.hero h1{font-size:2rem;}.form-row{grid-template-columns:1fr;}nav ul{gap:1rem;}}
+</style>
+</head>
+<body>
+
+<!-- Success Message -->
+<div class="success-message" id="successMessage">✅ Demande envoyée avec succès !</div>
+
+<!-- Modal Avocat -->
+<div class="modal" id="equipeModal">
+    <div class="modal-content">
+        <span class="close-modal" onclick="closeModal()">&times;</span>
+        <div id="modalPhoto" style="font-size:4rem;margin-bottom:1rem;"></div>
+        <h2 id="modalNom"></h2>
+        <p id="modalPoste" style="color:#1e3a8a;font-weight:600;"></p>
+        <p id="modalSpecialite" style="color:#6b7280;font-style:italic;"></p>
+        <p id="modalDescription" style="margin-top:1rem;color:#333;"></p>
+    </div>
+</div>
+
+<!-- Home Page -->
+<div id="homePage">
+<header>
+    <nav>
+        <div class="logo">⚖️ CABINET MARTIN & ASSOCIÉS</div>
+        <ul>
+            <li><a href="#accueil">Accueil</a></li>
+            <li><a href="#services">Services</a></li>
+            <li><a href="#equipe">Équipe</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+    </nav>
+</header>
+
+<section class="hero" id="accueil">
+    <h1>Excellence & Expertise Juridique</h1>
+    <p>Votre partenaire de confiance pour tous vos besoins juridiques</p>
+    <a href="#services" class="btn">Consultation Gratuite</a>
+</section>
+
+<section class="section">
+    <div class="stats">
+        <div class="stat-card"><div class="stat-number">25+</div><p>Années d'expérience</p></div>
+        <div class="stat-card"><div class="stat-number">2000+</div><p>Clients satisfaits</p></div>
+        <div class="stat-card"><div class="stat-number">98%</div><p>Taux de réussite</p></div>
+        <div class="stat-card"><div class="stat-number">24/7</div><p>Disponibilité</p></div>
+    </div>
+</section>
+
+<section class="section" id="services">
+    <h2 class="section-title">Nos Domaines d'Expertise</h2>
+    <div class="services">
+        <div class="service-card" onclick="openForm('Droit des Affaires','💼')">
+            <div class="service-icon">💼</div>
+            <h3>Droit des Affaires</h3>
+            <p>Accompagnement complet dans la création, gestion et développement de votre entreprise.</p>
+        </div>
+        <div class="service-card" onclick="openForm('Droit du Travail','👔')">
+            <div class="service-icon">👔</div>
+            <h3>Droit du Travail</h3>
+            <p>Protection de vos droits en tant qu'employeur ou salarié.</p>
+        </div>
+        <div class="service-card" onclick="openForm('Droit Immobilier','🏠')">
+            <div class="service-icon">🏠</div>
+            <h3>Droit Immobilier</h3>
+            <p>Expertise en transactions immobilières, baux, copropriété et contentieux.</p>
+        </div>
+        <div class="service-card" onclick="openForm('Droit de la Famille','👨‍👩‍👧')">
+            <div class="service-icon">👨‍👩‍👧</div>
+            <h3>Droit de la Famille</h3>
+            <p>Accompagnement bienveillant dans divorces, successions et adoptions.</p>
+        </div>
+        <div class="service-card" onclick="openForm('Conseil Fiscal','💰')">
+            <div class="service-icon">💰</div>
+            <h3>Conseil Fiscal</h3>
+            <p>Optimisation fiscale, déclarations et contentieux fiscal.</p>
+        </div>
+        <div class="service-card" onclick="openForm('Contentieux','⚖️')">
+            <div class="service-icon">⚖️</div>
+            <h3>Contentieux</h3>
+            <p>Représentation devant toutes les juridictions civiles, commerciales et pénales.</p>
+        </div>
+    </div>
+</section>
+
+<section class="section" id="equipe" style="background:#f8fafc;">
+<h2 class="section-title">Notre Équipe</h2>
+<p style="text-align:center;color:#6b7280;font-size:1.2rem;margin-bottom:3rem;max-width:800px;margin-left:auto;margin-right:auto;">
+Des avocats expérimentés et reconnus, dédiés à la défense de vos intérêts avec excellence et professionnalisme
+</p>
+<div class="services">
+    <div class="equipe-card" onclick="openModal('Maître Sophie Martin')">
+        <div class="equipe-photo">⚖️</div>
+        <h3>Maître Sophie Martin</h3>
+        <p class="equipe-poste">Avocate Associée</p>
+        <p class="equipe-specialite">Droit des Affaires & Commercial</p>
+        <p style="color:#6b7280;margin-top:1rem;">20 ans d'expérience • Barreau de Tunis</p>
+    </div>
+    <div class="equipe-card" onclick="openModal('Maître Ahmed Ben Salah')">
+        <div class="equipe-photo">👨‍⚖️</div>
+        <h3>Maître Ahmed Ben Salah</h3>
+        <p class="equipe-poste">Avocat Associé</p>
+        <p class="equipe-specialite">Droit Pénal & Contentieux</p>
+        <p style="color:#6b7280;margin-top:1rem;">18 ans d'expérience • Barreau de Tunis</p>
+    </div>
+    <div class="equipe-card" onclick="openModal('Maître Leila Trabelsi')">
+        <div class="equipe-photo">👩‍⚖️</div>
+        <h3>Maître Leila Trabelsi</h3>
+        <p class="equipe-poste">Avocate</p>
+        <p class="equipe-specialite">Droit de la Famille & Immobilier</p>
+        <p style="color:#6b7280;margin-top:1rem;">15 ans d'expérience • Barreau de Tunis</p>
+    </div>
+    <div class="equipe-card" onclick="openModal('Maître Karim Hamdi')">
+        <div class="equipe-photo">👨‍💼</div>
+        <h3>Maître Karim Hamdi</h3>
+        <p class="equipe-poste">Avocat</p>
+        <p class="equipe-specialite">Droit du Travail & Fiscal</p>
+        <p style="color:#6b7280;margin-top:1rem;">12 ans d'expérience • Barreau de Tunis</p>
+    </div>
+</div>
+</section>
+
+<section class="section contact" id="contact">
+<h2 class="section-title" style="color:white;">Contactez-nous</h2>
+<div class="contact-grid">
+<div class="contact-item"><div class="contact-icon">📞</div><h3>Téléphone</h3><p>+216 52 580 919</p></div>
+<div class="contact-item"><div class="contact-icon">📧</div><h3>Email</h3><p>bensalahsinda14@gmail.com</p></div>
+<div class="contact-item"><div class="contact-icon">📍</div><h3>Adresse</h3><p>Mida, Nebil<br>Tunis 8044, Tunisie</p></div>
+</div>
+</section>
+
+<footer>
+<p>&copy; 2024 Cabinet Martin & Associés. Tous droits réservés.</p>
+<p>Ordre des Avocats de Tunis | Secret professionnel garanti</p>
+</footer>
+</div>
+
+<!-- Form Page -->
+<div class="form-page" id="formPage">
+<header>
+<nav>
+    <div class="logo">⚖️ CABINET MARTIN & ASSOCIÉS</div>
+    <ul>
+        <li><a href="#" onclick="closePage(); return false;">Retour</a></li>
+    </ul>
+</nav>
+</header>
+
+<div class="form-container">
+<a href="#" class="back-btn" onclick="closePage(); return false;">← Retour aux services</a>
+
+<div class="form-header">
+    <div class="form-icon" id="formIcon">💼</div>
+    <h2 id="formTitle" style="color:#0a1f44;font-size:2.5rem;margin-bottom:0.5rem;">Droit des Affaires</h2>
+    <p style="color:#6b7280;">Remplissez le formulaire pour une consultation gratuite</p>
+</div>
+
+<div class="form-card">
+<form id="consultationForm" onsubmit="return submitForm();">
+    <input type="hidden" id="domaine" name="domaine">
+    <div class="form-group">
+        <label>Nom du plaignant *</label>
+        <input type="text" id="complainant" placeholder="Nom du plaignant">
+        <div class="error-message">Ce champ est requis</div>
+    </div>
+    <div class="form-group">
+        <label>Nom du défendeur *</label>
+        <input type="text" id="defendant" placeholder="Nom du défendeur">
+        <div class="error-message">Ce champ est requis</div>
+    </div>
+    <div class="form-group">
+        <label>Email *</label>
+        <input type="email" id="email" placeholder="Votre email">
+        <div class="error-message">Email invalide</div>
+    </div>
+    <div class="form-group">
+        <label>CIN *</label>
+        <input type="text" id="cin" placeholder="8 chiffres">
+        <div class="error-message">CIN invalide (8 chiffres)</div>
+    </div>
+    <div class="form-group">
+        <label>Description de la demande *</label>
+        <textarea id="description" placeholder="Décrivez votre demande"></textarea>
+        <div class="error-message">Ce champ est requis</div>
+    </div>
+    <div class="form-group" id="avocatGroup">
+        <label>Choisir un avocat *</label>
+        <select id="avocat">
+            <option value="">-- Sélectionner --</option>
+        </select>
+        <div class="error-message">Ce champ est requis</div>
+    </div>
+    <button type="submit" class="submit-btn">Envoyer la demande</button>
+</form>
+</div>
+</div>
+</div>
+
+<script>
+// Avocats par service
+const serviceAvocats={
+    "Droit des Affaires":["Maître Sophie Martin","Maître Karim Hamdi"],
+    "Droit du Travail":["Maître Karim Hamdi"],
+    "Droit Immobilier":["Maître Leila Trabelsi"],
+    "Droit de la Famille":["Maître Leila Trabelsi"],
+    "Conseil Fiscal":["Maître Karim Hamdi"],
+    "Contentieux":["Maître Ahmed Ben Salah"]
+};
+
+function openForm(domaine, icon){
+    document.getElementById('homePage').style.display='none';
+    document.getElementById('formPage').classList.add('active');
+    document.getElementById('formTitle').textContent=domaine;
+    document.getElementById('formIcon').textContent=icon;
+    document.getElementById('domaine').value=domaine;
+
+    // Placeholder adaptatif
+    const complainant=document.getElementById('complainant');
+    const defendant=document.getElementById('defendant');
+    if(domaine==="Droit de la Famille"){
+        complainant.placeholder="Nom de l'époux(se)";
+        defendant.placeholder="Nom de l'autre époux(se)";
+    }else if(domaine==="Droit des Affaires"){
+        complainant.placeholder="Nom de l'entreprise";
+        defendant.placeholder="Nom du client ou partenaire";
+    }else{
+        complainant.placeholder="Nom du plaignant";
+        defendant.placeholder="Nom du défendeur";
+    }
+
+    // Dropdown avocat
+    const select=document.getElementById('avocat');
+    select.innerHTML='<option value="">-- Sélectionner --</option>';
+    if(serviceAvocats[domaine]){
+        serviceAvocats[domaine].forEach(av=>{
+            const opt=document.createElement('option');
+            opt.value=av; opt.textContent=av;
+            select.appendChild(opt);
+        });
+    }
+    window.scrollTo(0,0);
+}
+
+function closePage(){
+    document.getElementById('formPage').classList.remove('active');
+    document.getElementById('homePage').style.display='block';
+}
+
+// Validation & submission
+function submitForm(){
+    let valid=true;
+    const fields=[
+        {id:"complainant",name:"plaignant"},
+        {id:"defendant",name:"défendeur"},
+        {id:"email",name:"email"},
+        {id:"cin",name:"CIN"},
+        {id:"description",name:"description"},
+        {id:"avocat",name:"avocat"}
+    ];
+    fields.forEach(f=>{
+        const el=document.getElementById(f.id);
+        const parent=el.parentElement;
+        if(!el.value.trim() || (f.id==="avocat" && el.value==="")){
+            parent.classList.add("error");
+            parent.querySelector(".error-message").classList.add("show");
+            valid=false;
+        }else{
+            parent.classList.remove("error");
+            parent.querySelector(".error-message").classList.remove("show");
+        }
+    });
+
+    // Email
+    const email=document.getElementById('email').value.trim();
+    const re=/^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if(!re.test(email)){
+        const parent=document.getElementById('email').parentElement;
+        parent.classList.add("error");
+        parent.querySelector(".error-message").classList.add("show");
+        valid=false;
+    }
+
+    // CIN
+    const cin=document.getElementById('cin').value.trim();
+    if(!/^\d{8}$/.test(cin)){
+        const parent=document.getElementById('cin').parentElement;
+        parent.classList.add("error");
+        parent.querySelector(".error-message").classList.add("show");
+        valid=false;
+    }
+
+    // Plaignant ≠ défendeur
+    const c=document.getElementById('complainant').value.trim();
+    const d=document.getElementById('defendant').value.trim();
+    if(c===d){
+        ['complainant','defendant'].forEach(id=>{
+            const parent=document.getElementById(id).parentElement;
+            parent.classList.add("error");
+            parent.querySelector(".error-message").textContent="Le plaignant et le défendeur ne peuvent pas être identiques";
+            parent.querySelector(".error-message").classList.add("show");
+        });
+        valid=false;
+    }
+
+    if(valid){
+        document.getElementById('consultationForm').reset();
+        document.getElementById('successMessage').classList.add('show');
+        setTimeout(()=>{document.getElementById('successMessage').classList.remove('show');closePage();},3000);
+    }else{
+        // Scroll vers la première erreur
+        const firstError=document.querySelector('.form-group.error');
+        if(firstError) firstError.scrollIntoView({behavior:"smooth",block:"center"});
+    }
+
+    return false;
+}
+
+// Modal équipe
+const equipeDetails={
+    "Maître Sophie Martin":{
+        photo:"⚖️",poste:"Avocate Associée",specialite:"Droit des Affaires & Commercial",
+        description:"20 ans d'expérience • Barreau de Tunis"
+    },
+    "Maître Ahmed Ben Salah":{
+        photo:"👨‍⚖️",poste:"Avocat Associé",specialite:"Droit Pénal & Contentieux",
+        description:"18 ans d'expérience • Barreau de Tunis"
+    },
+    "Maître Leila Trabelsi":{
+        photo:"👩‍⚖️",poste:"Avocate",specialite:"Droit de la Famille & Immobilier",
+        description:"15 ans d'expérience • Barreau de Tunis"
+    },
+    "Maître Karim Hamdi":{
+        photo:"👨‍💼",poste:"Avocat",specialite:"Droit du Travail & Fiscal",
+        description:"12 ans d'expérience • Barreau de Tunis"
+    }
+};
+
+function openModal(name){
+    const modal=document.getElementById('equipeModal');
+    modal.classList.add('active');
+    const details=equipeDetails[name];
+    document.getElementById('modalPhoto').textContent=details.photo;
+    document.getElementById('modalNom').textContent=name;
+    document.getElementById('modalPoste').textContent=details.poste;
+    document.getElementById('modalSpecialite').textContent=details.specialite;
+    document.getElementById('modalDescription').textContent=details.description;
+}
+function closeModal(){
+    document.getElementById('equipeModal').classList.remove('active');
+}
+</script>
+</body>
+</html>
