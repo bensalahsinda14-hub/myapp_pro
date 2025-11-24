@@ -1,2 +1,4 @@
 com/mycompany/app/App.class
 com/mycompany/app/AppGUI.class
+com/mycompany/app/AppGUI$CardRenderer.class
+com/mycompany/app/AppGUI$Client.class
