@@ -1,17 +1,19 @@
 pipeline {
     agent any
+
     tools {
         maven 'Maven3'
         jdk 'JDK17'
     }
+
     stages {
         stage('Checkout') {
             steps {
                 checkout([$class: 'GitSCM',
                     branches: [[name: 'main']],
                     userRemoteConfigs: [[
-                        url: 'git@github.com:bensalahsinda14-hub/myapp_pro.git',
-                        credentialsId: 'github_ssh_key'
+                        url: 'https://github.com/bensalahsinda14-hub/myapp_pro.git',
+                        credentialsId: 'github_https_token' // le token GitHub
                     ]]
                 ])
             }
@@ -43,4 +45,3 @@ pipeline {
         }
     }
 }
-
