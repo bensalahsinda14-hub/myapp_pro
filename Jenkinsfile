@@ -39,6 +39,7 @@ pipeline {
                         -Dsonar.projectKey=myapp_pro \
                         -Dsonar.host.url=http://192.168.17.146:9000 \
                         -Dsonar.login=$SONAR_TOKEN
+                        -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml
                     """
                 }
             }
