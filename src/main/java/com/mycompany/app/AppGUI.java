@@ -191,15 +191,12 @@ public class AppGUI {
         btnSupprimer = styledButton("🗑️ Supprimer", new Color(239, 68, 68));
         btnQuitter = styledButton("❌ Quitter", new Color(75, 85, 99));
 
-        buttons.add(btnAjouter); buttons.add(btnOuvrir); buttons.add(btnVoir); buttons.add(btnSupprimer); buttons.add(btnQuitter);
+        buttons.add(btnAjouter);
+        buttons.add(btnOuvrir);
+        buttons.add(btnVoir);
+        buttons.add(btnSupprimer);
+        buttons.add(btnQuitter);
         frame.add(buttons, BorderLayout.PAGE_END);
-
-        // Stocker les boutons pour actions
-        buttons.add(this.btnAjouter);
-        buttons.add(this.btnOuvrir);
-        buttons.add(this.btnVoir);
-        buttons.add(this.btnSupprimer);
-        buttons.add(this.btnQuitter);
 
     }
 
