@@ -71,6 +71,8 @@
                         <configuration>
                             <outputDirectory>${project.build.directory}/jacoco</outputDirectory>
                             <xml>true</xml>
+                            <csv>false</csv>
+                            <html>false</html>
                         </configuration>
                     </execution>
                 </executions>
