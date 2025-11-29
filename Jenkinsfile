@@ -35,7 +35,7 @@ pipeline {
             steps {
                 withCredentials([string(credentialsId: 'sonar_token', variable: 'SONAR_TOKEN')]) {
                     sh """
-                        mvn sonar:sonar \
+                        mvn verify sonar:sonar \
                         -Dsonar.projectKey=myapp_pro \
                         -Dsonar.host.url=http://192.168.17.146:9000 \
                         -Dsonar.login=$SONAR_TOKEN \
