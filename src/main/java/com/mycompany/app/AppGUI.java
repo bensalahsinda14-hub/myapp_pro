@@ -16,11 +16,20 @@ private List<Client> storage = new ArrayList<>();
 private static final String DEFAULT_FILE_URL = "file:///home/devops/myapp_pro/mon-cabinet/index.html";
 
 static class Client {
-    String plaig, defend, email, cin, service, description;
+    String plaig;
+    String defend;
+    String email;
+    String cin;
+    String service;
+    String description;
 
     Client(String plaig, String defend, String email, String cin, String service, String description) {
-        this.plaig = plaig; this.defend = defend; this.email = email;
-        this.cin = cin; this.service = service; this.description = description;
+        this.plaig = plaig;
+        this.defend = defend;
+        this.email = email;
+        this.cin = cin;
+        this.service = service;
+        this.description = description;
     }
 
     @Override
