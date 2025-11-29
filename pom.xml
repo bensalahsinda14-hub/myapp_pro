@@ -69,10 +69,8 @@
                             <goal>report</goal>
                         </goals>
                         <configuration>
-                            <outputDirectory>${project.build.directory}/jacoco</outputDirectory>
+                            <outputDirectory>${project.build.directory}/site/jacoco</outputDirectory>
                             <xml>true</xml>
-                            <csv>false</csv>
-                            <html>false</html>
                         </configuration>
                     </execution>
                 </executions>
