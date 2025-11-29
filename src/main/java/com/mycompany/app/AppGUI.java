@@ -204,7 +204,11 @@ public class AppGUI {
     }
 
     // ---------------- Actions ----------------
-    private JButton btnAjouter, btnOuvrir, btnVoir, btnSupprimer, btnQuitter;
+    private JButton btnAjouter;
+    private JButton btnOuvrir;
+    private JButton btnVoir;
+    private JButton btnSupprimer;
+    private JButton btnQuitter;
 
     private void initActions() {
         btnAjouter.addActionListener(e -> handleAjouter());
