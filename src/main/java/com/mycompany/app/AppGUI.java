@@ -185,21 +185,22 @@ public class AppGUI {
         buttons.setBackground(new Color(245, 247, 250));
         buttons.setBorder(new EmptyBorder(10, 0, 20, 0));
 
-        JButton btnAjouter = styledButton("➕ Ajouter", new Color(16, 185, 129));
-        JButton btnOuvrir = styledButton("🌐 Ouvrir Site", new Color(59, 130, 246));
-        JButton btnVoir = styledButton("👁️ Voir Détails", new Color(139, 92, 246));
-        JButton btnSupprimer = styledButton("🗑️ Supprimer", new Color(239, 68, 68));
-        JButton btnQuitter = styledButton("❌ Quitter", new Color(75, 85, 99));
+        btnAjouter = styledButton("➕ Ajouter", new Color(16, 185, 129));
+        btnOuvrir = styledButton("🌐 Ouvrir Site", new Color(59, 130, 246));
+        btnVoir = styledButton("👁️ Voir Détails", new Color(139, 92, 246));
+        btnSupprimer = styledButton("🗑️ Supprimer", new Color(239, 68, 68));
+        btnQuitter = styledButton("❌ Quitter", new Color(75, 85, 99));
 
         buttons.add(btnAjouter); buttons.add(btnOuvrir); buttons.add(btnVoir); buttons.add(btnSupprimer); buttons.add(btnQuitter);
         frame.add(buttons, BorderLayout.PAGE_END);
 
         // Stocker les boutons pour actions
-        this.btnAjouter = btnAjouter;
-        this.btnOuvrir = btnOuvrir;
-        this.btnVoir = btnVoir;
-        this.btnSupprimer = btnSupprimer;
-        this.btnQuitter = btnQuitter;
+        buttons.add(this.btnAjouter);
+        buttons.add(this.btnOuvrir);
+        buttons.add(this.btnVoir);
+        buttons.add(this.btnSupprimer);
+        buttons.add(this.btnQuitter);
+
     }
 
     // ---------------- Actions ----------------
