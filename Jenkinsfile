@@ -13,7 +13,7 @@ pipeline {
                     branches: [[name: 'main']],
                     userRemoteConfigs: [[
                         url: 'https://github.com/bensalahsinda14-hub/myapp_pro.git',
-                        credentialsId: 'github_https_token' // le token GitHub
+                        credentialsId: 'github_https_token' // token GitHub ajouté dans Jenkins
                     ]]
                 ])
             }
@@ -38,8 +38,8 @@ pipeline {
                         mvn sonar:sonar \
                         -Dsonar.projectKey=myapp_pro \
                         -Dsonar.host.url=http://192.168.17.146:9000 \
-                        -Dsonar.login=$SONAR_TOKEN
-                        -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml
+                        -Dsonar.login=$SONAR_TOKEN \
+                        -Dsonar.coverage.jacoco.xmlReportPaths=target/jacoco/jacoco.xml
                     """
                 }
             }
