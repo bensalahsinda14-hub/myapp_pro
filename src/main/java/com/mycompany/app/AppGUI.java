@@ -198,6 +198,12 @@ public class AppGUI {
         buttons.add(btnQuitter);
         frame.add(buttons, BorderLayout.PAGE_END);
 
+        buttons.add(this.btnAjouter);
+        buttons.add(this.btnOuvrir);
+        buttons.add(this.btnVoir);
+        buttons.add(this.btnSupprimer);
+        buttons.add(this.btnQuitter);
+
     }
 
     // ---------------- Actions ----------------
