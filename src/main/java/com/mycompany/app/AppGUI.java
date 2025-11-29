@@ -1,336 +1,301 @@
 package com.mycompany.app;
 
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import static org.junit.jupiter.api.Assertions.*;
+
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
-import javax.swing.border.LineBorder;
 import java.awt.*;
-import java.net.URI;
-import java.util.ArrayList;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.List;
 
-public class AppGUI {
+@DisplayName("Tests pour AppGUI - Cabinet Martin & Associés")
+public class AppTest {
 
-    // ---------------- Constants ----------------
-    private static final String FONT_NAME = "Segoe UI";
-    private static final String FONT_EMOJI = "Segoe UI Emoji";
-    private static final String MSG_ERROR = "Erreur";
-    private static final String MSG_INFO = "Info";
-    private static final String DEFAULT_FILE_URL = "file:///home/devops/myapp_pro/mon-cabinet/index.html";
-    private static final String ADMIN_CODE = "1234";
+    private AppGUI appGUI;
 
-    // ---------------- Fields ----------------
-    private DefaultListModel<String> listModel = new DefaultListModel<>();
-    private List<Client> storage = new ArrayList<>();
-
-    private JFrame frame;
-    private JTextField tfPlaignant;
-    private JTextField tfDefendeur;
-    private JTextField tfEmail;
-    private JTextField tfCIN;
-    private JComboBox<String> cbService;
-    private JTextArea taDescription;
-    private JList<String> jlist;
-
-    // ---------------- Client ----------------
-    static class Client {
-        String plaig;
-        String defend;
-        String email;
-        String cin;
-        String service;
-        String description;
-
-        Client(String plaig, String defend, String email, String cin, String service, String description) {
-            this.plaig = plaig;
-            this.defend = defend;
-            this.email = email;
-            this.cin = cin;
-            this.service = service;
-            this.description = description;
-        }
-
-        @Override
-        public String toString() {
-            return plaig + " vs " + defend + " | " + service;
+    @BeforeEach
+    public void setUp() {
+        // Initialize GUI on EDT (Event Dispatch Thread)
+        try {
+            SwingUtilities.invokeAndWait(() -> {
+                appGUI = new AppGUI();
+            });
+        } catch (Exception e) {
+            fail("Failed to initialize AppGUI: " + e.getMessage());
         }
     }
 
-    // ---------------- Constructor ----------------
-    public AppGUI() {
-        initFrame();
-        initHeader();
-        initForm();
-        initList();
-        initButtons();
-        initActions();
-        frame.setVisible(true);
+    // ==================== Test Client Class ====================
+    
+    @Test
+    @DisplayName("Test création d'un client")
+    public void testClientCreation() {
+        AppGUI.Client client = new AppGUI.Client(
+            "Jean Dupont", 
+            "Marie Martin", 
+            "jean@email.com", 
+            "12345678", 
+            "Droit des Affaires", 
+            "Description test"
+        );
+        
+        assertNotNull(client);
+        assertEquals("Jean Dupont", client.plaig);
+        assertEquals("Marie Martin", client.defend);
+        assertEquals("jean@email.com", client.email);
+        assertEquals("12345678", client.cin);
+        assertEquals("Droit des Affaires", client.service);
+        assertEquals("Description test", client.description);
     }
 
-    // ---------------- Initialize Frame ----------------
-    private void initFrame() {
-        frame = new JFrame("⚖️ CABINET MARTIN & ASSOCIÉS - Gestion");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(960, 780);
-        frame.setLocationRelativeTo(null);
-        frame.setLayout(new BorderLayout(12, 12));
+    @Test
+    @DisplayName("Test toString du client")
+    public void testClientToString() {
+        AppGUI.Client client = new AppGUI.Client(
+            "Ahmed", 
+            "Mohamed", 
+            "test@test.com", 
+            "11223344", 
+            "Droit du Travail", 
+            "Test"
+        );
+        
+        String expected = "Ahmed vs Mohamed | Droit du Travail";
+        assertEquals(expected, client.toString());
     }
 
-    // ---------------- Header ----------------
-    private void initHeader() {
-        JPanel header = new JPanel(new FlowLayout(FlowLayout.CENTER, 12, 18));
-        header.setBackground(new Color(10, 36, 99));
-        header.setPreferredSize(new Dimension(frame.getWidth(), 100));
+    // ==================== Test GUI Components ====================
 
-        JLabel icon = new JLabel("⚖️");
-        icon.setForeground(Color.WHITE);
-        icon.setFont(new Font(FONT_EMOJI, Font.PLAIN, 36));
-
-        JLabel title = new JLabel("CABINET MARTIN & ASSOCIÉS");
-        title.setForeground(Color.WHITE);
-        title.setFont(new Font(FONT_NAME, Font.BOLD, 32));
-
-        header.add(icon);
-        header.add(title);
-        frame.add(header, BorderLayout.NORTH);
+    @Test
+    @DisplayName("Test initialisation du frame")
+    public void testFrameInitialization() throws Exception {
+        JFrame frame = getPrivateField(appGUI, "frame");
+        
+        assertNotNull(frame);
+        assertEquals("⚖️ CABINET MARTIN & ASSOCIÉS - Gestion", frame.getTitle());
+        assertEquals(960, frame.getWidth());
+        assertEquals(780, frame.getHeight());
+        assertEquals(JFrame.EXIT_ON_CLOSE, frame.getDefaultCloseOperation());
     }
 
-    // ---------------- Form Panel ----------------
-    private void initForm() {
-        JPanel center = new JPanel(new BorderLayout(10, 10));
-        center.setBorder(new EmptyBorder(12, 20, 12, 20));
-        center.setBackground(new Color(245, 247, 250));
-
-        JPanel formPanel = new JPanel(new GridBagLayout());
-        formPanel.setBackground(Color.WHITE);
-        formPanel.setBorder(BorderFactory.createCompoundBorder(
-                new LineBorder(new Color(0, 51, 102), 2, true),
-                new EmptyBorder(16, 16, 16, 16)
-        ));
-
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(8, 12, 6, 12);
-        gbc.anchor = GridBagConstraints.WEST;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-
-        tfPlaignant = new JTextField(18);
-        tfDefendeur = new JTextField(18);
-        tfEmail = new JTextField(18);
-        tfCIN = new JTextField(10);
-
-        JLabel lblPlaignant = new JLabel("Plaignant:");
-        JLabel lblDefendeur = new JLabel("Défendeur:");
-        JLabel lblEmail = new JLabel("Email:");
-        JLabel lblCIN = new JLabel("CIN:");
-        JLabel lblService = new JLabel("Service:");
-        JLabel lblDescription = new JLabel("Description:");
-
-        String[] services = {"Droit des Affaires", "Droit du Travail", "Droit Immobilier", "Droit de la Famille", "Conseil Fiscal", "Contentieux"};
-        cbService = new JComboBox<>(services);
-
-        taDescription = new JTextArea(4, 48);
-        taDescription.setLineWrap(true);
-        taDescription.setWrapStyleWord(true);
-        JScrollPane descScroll = new JScrollPane(taDescription,
-                ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
-                ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-
-        gbc.gridx = 0; gbc.gridy = 0; formPanel.add(lblPlaignant, gbc);
-        gbc.gridx = 1; gbc.gridy = 0; formPanel.add(tfPlaignant, gbc);
-        gbc.gridx = 2; gbc.gridy = 0; formPanel.add(lblDefendeur, gbc);
-        gbc.gridx = 3; gbc.gridy = 0; formPanel.add(tfDefendeur, gbc);
-
-        gbc.gridx = 0; gbc.gridy = 1; formPanel.add(lblEmail, gbc);
-        gbc.gridx = 1; gbc.gridy = 1; formPanel.add(tfEmail, gbc);
-        gbc.gridx = 2; gbc.gridy = 1; formPanel.add(lblCIN, gbc);
-        gbc.gridx = 3; gbc.gridy = 1; formPanel.add(tfCIN, gbc);
-
-        gbc.gridx = 0; gbc.gridy = 2; formPanel.add(lblService, gbc);
-        gbc.gridx = 1; gbc.gridy = 2; formPanel.add(cbService, gbc);
-
-        gbc.gridx = 0; gbc.gridy = 3; gbc.gridwidth = 1; formPanel.add(lblDescription, gbc);
-        gbc.gridx = 1; gbc.gridy = 3; gbc.gridwidth = 3; formPanel.add(descScroll, gbc);
-
-        center.add(formPanel, BorderLayout.NORTH);
-        frame.add(center, BorderLayout.CENTER);
+    @Test
+    @DisplayName("Test initialisation des champs de texte")
+    public void testTextFieldsInitialization() throws Exception {
+        JTextField tfPlaignant = getPrivateField(appGUI, "tfPlaignant");
+        JTextField tfDefendeur = getPrivateField(appGUI, "tfDefendeur");
+        JTextField tfEmail = getPrivateField(appGUI, "tfEmail");
+        JTextField tfCIN = getPrivateField(appGUI, "tfCIN");
+        
+        assertNotNull(tfPlaignant);
+        assertNotNull(tfDefendeur);
+        assertNotNull(tfEmail);
+        assertNotNull(tfCIN);
     }
 
-    // ---------------- List Panel ----------------
-    private void initList() {
-        JPanel listPanel = new JPanel(new BorderLayout());
-        listPanel.setBackground(Color.WHITE);
-        listPanel.setBorder(BorderFactory.createCompoundBorder(
-                new LineBorder(new Color(0, 51, 102), 2, true),
-                new EmptyBorder(16, 16, 16, 16)
-        ));
-
-        jlist = new JList<>(listModel);
-        jlist.setFont(new Font(FONT_NAME, Font.PLAIN, 14));
-        jlist.setFixedCellHeight(36);
-        jlist.setCellRenderer(new CardRenderer());
-
-        JScrollPane listScroll = new JScrollPane(jlist,
-                ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
-                ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-        listScroll.setBorder(BorderFactory.createEmptyBorder(8, 8, 8, 8));
-        listScroll.setPreferredSize(new Dimension(880, 200));
-
-        listPanel.add(listScroll, BorderLayout.CENTER);
-
-        ((JPanel) frame.getContentPane().getComponent(0)).add(listPanel, BorderLayout.CENTER);
+    @Test
+    @DisplayName("Test initialisation du ComboBox services")
+    public void testComboBoxInitialization() throws Exception {
+        JComboBox<String> cbService = getPrivateField(appGUI, "cbService");
+        
+        assertNotNull(cbService);
+        assertEquals(6, cbService.getItemCount());
+        assertEquals("Droit des Affaires", cbService.getItemAt(0));
+        assertEquals("Contentieux", cbService.getItemAt(5));
     }
 
-    // ---------------- Buttons ----------------
-    private void initButtons() {
-        JPanel buttons = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 12));
-        buttons.setBackground(new Color(245, 247, 250));
-        buttons.setBorder(new EmptyBorder(10, 0, 20, 0));
-
-        btnAjouter = styledButton("➕ Ajouter", new Color(16, 185, 129));
-        btnOuvrir = styledButton("🌐 Ouvrir Site", new Color(59, 130, 246));
-        btnVoir = styledButton("👁️ Voir Détails", new Color(139, 92, 246));
-        btnSupprimer = styledButton("🗑️ Supprimer", new Color(239, 68, 68));
-        btnQuitter = styledButton("❌ Quitter", new Color(75, 85, 99));
-
-        buttons.add(btnAjouter);
-        buttons.add(btnOuvrir);
-        buttons.add(btnVoir);
-        buttons.add(btnSupprimer);
-        buttons.add(btnQuitter);
-        frame.add(buttons, BorderLayout.PAGE_END);
-
-        buttons.add(this.btnAjouter);
-        buttons.add(this.btnOuvrir);
-        buttons.add(this.btnVoir);
-        buttons.add(this.btnSupprimer);
-        buttons.add(this.btnQuitter);
-
+    @Test
+    @DisplayName("Test initialisation de la liste")
+    public void testListInitialization() throws Exception {
+        DefaultListModel<String> listModel = getPrivateField(appGUI, "listModel");
+        JList<String> jlist = getPrivateField(appGUI, "jlist");
+        
+        assertNotNull(listModel);
+        assertNotNull(jlist);
+        assertEquals(0, listModel.getSize());
     }
 
-    // ---------------- Actions ----------------
-    private JButton btnAjouter;
-    private JButton btnOuvrir;
-    private JButton btnVoir;
-    private JButton btnSupprimer;
-    private JButton btnQuitter;
+    // ==================== Test Actions ====================
 
-    private void initActions() {
-        btnAjouter.addActionListener(e -> handleAjouter());
-        btnVoir.addActionListener(e -> handleVoir());
-        btnOuvrir.addActionListener(e -> handleOuvrir());
-        btnSupprimer.addActionListener(e -> handleSupprimer());
-        btnQuitter.addActionListener(e -> handleQuitter());
+    @Test
+    @DisplayName("Test ajout d'un client valide")
+    public void testHandleAjouterValid() throws Exception {
+        // Set form values
+        setTextFieldValue("tfPlaignant", "Test Plaignant");
+        setTextFieldValue("tfDefendeur", "Test Defendeur");
+        setTextFieldValue("tfEmail", "test@example.com");
+        setTextFieldValue("tfCIN", "12345678");
+        setTextAreaValue("taDescription", "Test description");
+        
+        // Get storage before
+        List<AppGUI.Client> storage = getPrivateField(appGUI, "storage");
+        int sizeBefore = storage.size();
+        
+        // Trigger handleAjouter
+        invokePrivateMethod(appGUI, "handleAjouter");
+        
+        // Verify client was added
+        assertEquals(sizeBefore + 1, storage.size());
+        
+        AppGUI.Client addedClient = storage.get(storage.size() - 1);
+        assertEquals("Test Plaignant", addedClient.plaig);
+        assertEquals("Test Defendeur", addedClient.defend);
+        assertEquals("test@example.com", addedClient.email);
+        assertEquals("12345678", addedClient.cin);
     }
 
-    // ---------------- Action Handlers ----------------
-    private void handleAjouter() {
-        String plaig = tfPlaignant.getText().trim();
-        String defend = tfDefendeur.getText().trim();
-        String email = tfEmail.getText().trim();
-        String cin = tfCIN.getText().trim();
-        String service = (String) cbService.getSelectedItem();
-        String desc = taDescription.getText().trim();
-
-        if (plaig.isEmpty() || defend.isEmpty() || email.isEmpty() || cin.isEmpty()) {
-            JOptionPane.showMessageDialog(frame, "Tous les champs obligatoires doivent être remplis.", MSG_ERROR, JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-        if (!cin.matches("\\d{8}")) {
-            JOptionPane.showMessageDialog(frame, "Le CIN doit contenir exactement 8 chiffres.", MSG_ERROR, JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-        if (!email.matches("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}$")) {
-            JOptionPane.showMessageDialog(frame, "Email invalide.", MSG_ERROR, JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-
-        Client client = new Client(plaig, defend, email, cin, service, desc);
-        storage.add(client);
-        listModel.addElement(client.toString());
-
-        tfPlaignant.setText(""); tfDefendeur.setText(""); tfEmail.setText(""); tfCIN.setText(""); taDescription.setText("");
-        JOptionPane.showMessageDialog(frame, "✅ Demande ajoutée avec succès !");
+    @Test
+    @DisplayName("Test ajout avec champs vides")
+    public void testHandleAjouterEmptyFields() throws Exception {
+        // Leave fields empty
+        setTextFieldValue("tfPlaignant", "");
+        setTextFieldValue("tfDefendeur", "");
+        setTextFieldValue("tfEmail", "");
+        setTextFieldValue("tfCIN", "");
+        
+        List<AppGUI.Client> storage = getPrivateField(appGUI, "storage");
+        int sizeBefore = storage.size();
+        
+        // Trigger handleAjouter
+        invokePrivateMethod(appGUI, "handleAjouter");
+        
+        // Verify no client was added
+        assertEquals(sizeBefore, storage.size());
     }
 
-    private void handleVoir() {
-        int sel = jlist.getSelectedIndex();
-        if (sel >= 0) {
-            Client c = storage.get(sel);
-            String msg = "Plaignant : " + c.plaig + "\nDéfendeur : " + c.defend +
-                    "\nEmail : " + c.email + "\nCIN : " + c.cin +
-                    "\nService : " + c.service + "\n\nDescription :\n" + c.description;
-
-            JTextArea ta = new JTextArea(msg);
-            ta.setEditable(false); ta.setBackground(null); ta.setFont(new Font(FONT_NAME, Font.PLAIN, 13));
-            JScrollPane sp = new JScrollPane(ta,
-                    ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
-                    ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-            sp.setPreferredSize(new Dimension(540, 260));
-            JOptionPane.showMessageDialog(frame, sp, "Détails de la demande", JOptionPane.INFORMATION_MESSAGE);
-        } else {
-            JOptionPane.showMessageDialog(frame, "Sélectionne une demande dans la liste.", MSG_INFO, JOptionPane.INFORMATION_MESSAGE);
-        }
+    @Test
+    @DisplayName("Test ajout avec CIN invalide")
+    public void testHandleAjouterInvalidCIN() throws Exception {
+        setTextFieldValue("tfPlaignant", "Test");
+        setTextFieldValue("tfDefendeur", "Test");
+        setTextFieldValue("tfEmail", "test@test.com");
+        setTextFieldValue("tfCIN", "123"); // Invalid: not 8 digits
+        
+        List<AppGUI.Client> storage = getPrivateField(appGUI, "storage");
+        int sizeBefore = storage.size();
+        
+        invokePrivateMethod(appGUI, "handleAjouter");
+        
+        assertEquals(sizeBefore, storage.size());
     }
 
-    private void handleOuvrir() {
-        try { Desktop.getDesktop().browse(new URI(DEFAULT_FILE_URL)); }
-        catch (Exception ex) { JOptionPane.showMessageDialog(frame, "Impossible d'ouvrir le fichier.\nChemin : " + DEFAULT_FILE_URL, MSG_ERROR, JOptionPane.ERROR_MESSAGE); }
+    @Test
+    @DisplayName("Test ajout avec email invalide")
+    public void testHandleAjouterInvalidEmail() throws Exception {
+        setTextFieldValue("tfPlaignant", "Test");
+        setTextFieldValue("tfDefendeur", "Test");
+        setTextFieldValue("tfEmail", "invalid-email"); // Invalid format
+        setTextFieldValue("tfCIN", "12345678");
+        
+        List<AppGUI.Client> storage = getPrivateField(appGUI, "storage");
+        int sizeBefore = storage.size();
+        
+        invokePrivateMethod(appGUI, "handleAjouter");
+        
+        assertEquals(sizeBefore, storage.size());
     }
 
-    private void handleSupprimer() {
-        int sel = jlist.getSelectedIndex();
-        if (sel >= 0) {
-            String code = JOptionPane.showInputDialog(frame, "Entrez le code admin pour supprimer :");
-            if (ADMIN_CODE.equals(code)) { storage.remove(sel); listModel.remove(sel); JOptionPane.showMessageDialog(frame, "✅ Demande supprimée."); }
-            else { JOptionPane.showMessageDialog(frame, "Code incorrect.", MSG_ERROR, JOptionPane.WARNING_MESSAGE); }
-        } else {
-            JOptionPane.showMessageDialog(frame, "Sélectionne une demande à supprimer.", MSG_INFO, JOptionPane.INFORMATION_MESSAGE);
-        }
+    @Test
+    @DisplayName("Test styled button creation")
+    public void testStyledButton() throws Exception {
+        Method method = AppGUI.class.getDeclaredMethod("styledButton", String.class, Color.class);
+        method.setAccessible(true);
+        
+        JButton button = (JButton) method.invoke(appGUI, "Test Button", Color.RED);
+        
+        assertNotNull(button);
+        assertEquals("Test Button", button.getText());
+        assertEquals(Color.RED, button.getBackground());
+        assertEquals(Color.WHITE, button.getForeground());
+        assertEquals(160, button.getPreferredSize().width);
+        assertEquals(44, button.getPreferredSize().height);
     }
 
-    private void handleQuitter() {
-        int conf = JOptionPane.showConfirmDialog(frame, "Voulez-vous vraiment quitter ?", "Confirmation", JOptionPane.YES_NO_OPTION);
-        if (conf == JOptionPane.YES_OPTION) System.exit(0);
+    // ==================== Test CardRenderer ====================
+
+    @Test
+    @DisplayName("Test CardRenderer initialization")
+    public void testCardRendererCreation() {
+        AppGUI.CardRenderer renderer = new AppGUI.CardRenderer();
+        assertNotNull(renderer);
     }
 
-    // ---------------- Styled Button ----------------
-    private JButton styledButton(String text, Color bg) {
-        JButton b = new JButton(text);
-        b.setBackground(bg); b.setForeground(Color.WHITE);
-        b.setFocusPainted(false); b.setFont(new Font(FONT_NAME, Font.BOLD, 14));
-        b.setPreferredSize(new Dimension(160, 44));
-        return b;
+    @Test
+    @DisplayName("Test CardRenderer component rendering")
+    public void testCardRendererGetListCellRendererComponent() {
+        AppGUI.CardRenderer renderer = new AppGUI.CardRenderer();
+        JList<String> list = new JList<>();
+        
+        Component comp = renderer.getListCellRendererComponent(
+            list, 
+            "Test Value", 
+            0, 
+            false, 
+            false
+        );
+        
+        assertNotNull(comp);
+        assertTrue(comp instanceof JPanel);
     }
 
-    // ---------------- Custom Renderer ----------------
-    private static class CardRenderer extends JPanel implements ListCellRenderer<String> {
-        private JLabel label;
-
-        CardRenderer() {
-            setLayout(new BorderLayout());
-            setOpaque(true);
-            label = new JLabel();
-            label.setBorder(new EmptyBorder(6, 12, 6, 12));
-            label.setFont(new Font(FONT_NAME, Font.PLAIN, 14));
-            add(label, BorderLayout.CENTER);
-        }
-
-        @Override
-        public Component getListCellRendererComponent(JList<? extends String> list, String value, int index, boolean isSelected, boolean cellHasFocus) {
-            label.setText(value);
-            if (isSelected) {
-                setBackground(new Color(204, 228, 255));
-                label.setForeground(new Color(10, 36, 99));
-                setBorder(new LineBorder(new Color(10, 36, 99), 2, true));
-            } else {
-                setBackground(new Color(245, 247, 250));
-                label.setForeground(new Color(30, 30, 30));
-                setBorder(new LineBorder(new Color(230, 230, 230), 1, true));
-            }
-            return this;
-        }
+    @Test
+    @DisplayName("Test CardRenderer selected state")
+    public void testCardRendererSelected() {
+        AppGUI.CardRenderer renderer = new AppGUI.CardRenderer();
+        JList<String> list = new JList<>();
+        
+        Component comp = renderer.getListCellRendererComponent(
+            list, 
+            "Test Value", 
+            0, 
+            true, // selected
+            false
+        );
+        
+        assertEquals(new Color(204, 228, 255), comp.getBackground());
     }
 
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(AppGUI::new);
+    @Test
+    @DisplayName("Test CardRenderer non-selected state")
+    public void testCardRendererNotSelected() {
+        AppGUI.CardRenderer renderer = new AppGUI.CardRenderer();
+        JList<String> list = new JList<>();
+        
+        Component comp = renderer.getListCellRendererComponent(
+            list, 
+            "Test Value", 
+            0, 
+            false, // not selected
+            false
+        );
+        
+        assertEquals(new Color(245, 247, 250), comp.getBackground());
+    }
+
+    // ==================== Helper Methods ====================
+
+    @SuppressWarnings("unchecked")
+    private <T> T getPrivateField(Object obj, String fieldName) throws Exception {
+        Field field = obj.getClass().getDeclaredField(fieldName);
+        field.setAccessible(true);
+        return (T) field.get(obj);
+    }
+
+    private void setTextFieldValue(String fieldName, String value) throws Exception {
+        JTextField field = getPrivateField(appGUI, fieldName);
+        field.setText(value);
+    }
+
+    private void setTextAreaValue(String fieldName, String value) throws Exception {
+        JTextArea field = getPrivateField(appGUI, fieldName);
+        field.setText(value);
+    }
+
+    private void invokePrivateMethod(Object obj, String methodName) throws Exception {
+        Method method = obj.getClass().getDeclaredMethod(methodName);
+        method.setAccessible(true);
+        method.invoke(obj);
     }
 }
